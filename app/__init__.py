@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+import os
 
 
 # create database object globally
@@ -8,8 +9,8 @@ db=SQLAlchemy()
 def create_app():
     app=Flask(__name__)
 
-    app.config['SECRET_KEY']='your-secret-key'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo.db'
+    app.config['SECRET_KEY']=os.environ.get('SECRET_KEY', 'dev-secret')
+    app.config['SQLALCHEMY_DATABASE_URI'] =os.environ.get('DATABASE_URL', 'sqlite:///todo.db')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
@@ -21,4 +22,5 @@ def create_app():
     app.register_blueprint(tasks_bp)
 
     return app
+
 
