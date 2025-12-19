@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Flask Auth App{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='js/script.js' ) }}">
+
+</head>
+<body>
+    <header> 
+        <div class="container">
+            
+            <nav class="navbar">
+  <div class="nav-header">
+    <div class="nav-brand">My To-Do App</div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+  </div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="{{ url_for('tasks.view_tasks') }}">Home</a></li>
+    {% if 'user' in session %}
+      <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+    {% else %}
+      <li><a href="{{ url_for('auth.register') }}">Register</a></li>
+      <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+    {% endif %}
+  </ul>
+</nav>
+
+        </div>
+
+    </header>
+
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories = True) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{category}}">
+                        {{ message }}
+                       
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            
+            {% endwith %}
+
+            {% block content %}
+            {% endblock %}
+    </main>
+
+    <footer>
+        <div>
+            <p>&copy; {{ current_year }} My Flask To-Do App. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    if (navToggle && navLinks) {
+      navToggle.addEventListener('click', function () {
+        navLinks.classList.toggle('show');
+      });
+    }
+  });
+</script>
+
+
+
+</body>
+</html>
